@@ -115,6 +115,8 @@ func (p *Provider) getZoneInfo(ctx context.Context, zoneName string) (netlifyZon
 	defer p.zonesMu.Unlock()
 
 	zoneName = strings.TrimRight(zoneName, ".")
+	fmt.Printf("*** In getZoneInfo: zoneName = %s\n", zoneName)
+	return netlifyZone{}, fmt.Errorf("zoneName = %s", zoneName)
 
 	// if we already got the zone info, reuse it
 	if p.zones == nil {
