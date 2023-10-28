@@ -180,10 +180,24 @@ func (p *Provider) doAPIRequest(req *http.Request, isZone bool, isDel bool, isGe
 
 	// get zone info
 	if isZone && isGet {
-		err = json.Unmarshal(body, &result)
+		var temp map[string]any
+		err = json.Unmarshal(body, &temp)
 		if err != nil {
 			return err
 		}
+		fmt.Printf("** original temp JSON map: %v", temp)
+		temp["domain"] = temp["name"]
+		fmt.Printf("** assigned temp JSON map: %v", temp)
+		marshalled_temp, err := json.Marshal(temp)
+		if err != nil {
+			return err
+		}
+		err = json.Unmarshal(marshalled_temp, &result)
+		fmt.Printf("** unmarshalled result: %v", result)
+		if err != nil {
+			return err
+		}
+
 		return err
 	}
 
