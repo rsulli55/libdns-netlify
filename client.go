@@ -116,7 +116,6 @@ func (p *Provider) getZoneInfo(ctx context.Context, zoneName string) (netlifyZon
 
 	zoneName = strings.TrimRight(zoneName, ".")
 	fmt.Printf("*** In getZoneInfo: zoneName = %s\n", zoneName)
-	return netlifyZone{}, fmt.Errorf("zoneName = %s", zoneName)
 
 	// if we already got the zone info, reuse it
 	if p.zones == nil {
@@ -126,9 +125,10 @@ func (p *Provider) getZoneInfo(ctx context.Context, zoneName string) (netlifyZon
 		return zone, nil
 	}
 
-	qs := make(url.Values)
-	qs.Set("name", zoneName)
-	reqURL := fmt.Sprintf("%s/dns_zones?%s", baseURL, qs.Encode())
+	// qs := make(url.Values)
+	// qs.Set("name", zoneName)
+	// reqURL := fmt.Sprintf("%s/dns_zones?%s", baseURL, qs.Encode())
+	reqURL := fmt.Sprintf("%s/dns_zones", baseURL)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, reqURL, nil)
 	if err != nil {
@@ -162,6 +162,7 @@ func (p *Provider) doAPIRequest(req *http.Request, isZone bool, isDel bool, isGe
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
+	fmt.Printf("** Did API request, bot body:\n%s\n", string(body))
 
 	if resp.StatusCode >= 400 {
 		return fmt.Errorf("got error status: HTTP %d: %+v", resp.StatusCode, string(body))
