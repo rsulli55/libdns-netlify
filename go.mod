@@ -1,4 +1,4 @@
-module github.com/libdns/netlify
+module github.com/rsulli55/libdns-netlify
 
 go 1.18
 
